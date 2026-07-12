@@ -3,10 +3,15 @@ import { Link } from 'react-router-dom';
 
 const PropertyCard = ({ property }) => {
   // If property images exist, load the first image. Otherwise, use a default image placeholder
-  const imageUrl =
-    property.images && property.images.length > 0
-      ? `/${property.images[0]}`
-      : 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80';
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80';
+    if (imagePath.startsWith('http')) return imagePath;
+    const apiUrl = import.meta.env.VITE_API_URL || '';
+    const baseUrl = apiUrl.endsWith('/api') ? apiUrl.slice(0, -4) : apiUrl;
+    return `${baseUrl}/${imagePath}`;
+  };
+
+  const imageUrl = getImageUrl(property.images && property.images.length > 0 ? property.images[0] : null);
 
   return (
     <div className="card" style={styles.card}>
