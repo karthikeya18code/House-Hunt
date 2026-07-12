@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables (Sensitive credentials)
+.env
+**/.env
+
+# Production builds
+dist/
+**/dist/
+
+# Uploads
+uploads/
+**/uploads/
+
+# IDE / OS junk files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
