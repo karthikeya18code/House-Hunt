@@ -130,7 +130,7 @@ const propertiesData = (owner1, owner2) => [
 
 const seedDatabase = async () => {
   try {
-    const connStr = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/househunt';
+    const connStr = process.env.MONGO_URI;
     console.log(`Connecting to database to seed: ${connStr.replace(/\/\/.*@/, '//<credentials>@')}`);
     
     await mongoose.connect(connStr);

@@ -3,7 +3,7 @@ const User = require('../models/User');
 
 // Helper function to generate JWT
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'househunt_secret_key_for_jwt_auth_123', {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
 };
