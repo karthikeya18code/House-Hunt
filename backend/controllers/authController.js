@@ -57,15 +57,27 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(`[Login attempt] Email: "${email}", Password provided: ${password ? 'Yes' : 'No'}`);
 
     if (!email || !password) {
+      console.log(`[Login failed] Missing email or password`);
       return res.status(400).json({ message: 'Please provide email and password' });
     }
 
     // Find user
     const user = await User.findOne({ email });
 
-    if (user && (await user.matchPassword(password))) {
+    if (!user) {
+      console.log(`[Login failed] User not found in DB with email: "${email}"`);
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    console.log(`[Login debug] User found in DB. Name: "${user.name}", Role: "${user.role}", Stored Hash: "${user.password}"`);
+    const isMatch = await user.matchPassword(password);
+    console.log(`[Login debug] Password match result: ${isMatch}`);
+
+    if (isMatch) {
+      console.log(`[Login success] Login approved for "${user.email}" (${user.role})`);
       res.json({
         _id: user._id,
         name: user.name,
@@ -75,9 +87,11 @@ const loginUser = async (req, res) => {
         token: generateToken(user._id),
       });
     } else {
+      console.log(`[Login failed] Password mismatch for "${user.email}"`);
       res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
+    console.error(`[Login error] Exception occurred: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 };
