@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema(
 // Hash password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
-    next();
+    return next();
   }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
@@ -51,7 +51,10 @@ userSchema.pre('save', async function (next) {
 
 // Compare password
 userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+  console.log(`[matchPassword debug] Entering compare. Plaintext length: ${enteredPassword ? enteredPassword.length : 0}, Stored Hash: "${this.password}"`);
+  const isMatch = await bcrypt.compare(enteredPassword, this.password);
+  console.log(`[matchPassword debug] Compare outcome: ${isMatch}`);
+  return isMatch;
 };
 
 module.exports = mongoose.model('User', userSchema);

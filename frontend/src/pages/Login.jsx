@@ -42,6 +42,7 @@ const Login = () => {
         navigate('/renter-dashboard');
       }
     } catch (error) {
+      console.error('Login error detail:', error);
       const errorMsg = error.response?.data?.message || 'Login failed. Please check your credentials.';
       showToast(errorMsg, 'error');
     } finally {

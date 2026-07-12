@@ -60,6 +60,7 @@ const Register = () => {
         navigate('/renter-dashboard');
       }
     } catch (error) {
+      console.error('Registration error detail:', error);
       const errMsg = error.response?.data?.message || 'Registration failed. Please try again.';
       showToast(errMsg, 'error');
     } finally {

@@ -68,6 +68,14 @@ const PropertyDetails = () => {
   const imagesList = property.images && property.images.length > 0 ? property.images : [];
   const defaultPlaceholder = 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1200&q=80';
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return defaultPlaceholder;
+    if (imagePath.startsWith('http')) return imagePath;
+    const apiUrl = import.meta.env.VITE_API_URL || '';
+    const baseUrl = apiUrl.endsWith('/api') ? apiUrl.slice(0, -4) : apiUrl;
+    return `${baseUrl}/${imagePath}`;
+  };
+
   return (
     <div className="container section">
       <Link to="/" style={styles.backLink}>← Back to Browse</Link>
@@ -77,7 +85,7 @@ const PropertyDetails = () => {
         <div style={styles.gallery}>
           <div style={styles.mainImgContainer}>
             <img
-              src={selectedImage ? `/${selectedImage}` : defaultPlaceholder}
+              src={getImageUrl(selectedImage)}
               alt={property.name}
               style={styles.mainImg}
             />
@@ -93,7 +101,7 @@ const PropertyDetails = () => {
                     borderColor: selectedImage === img ? 'var(--primary)' : 'var(--border)',
                   }}
                 >
-                  <img src={`/${img}`} alt="" style={styles.thumbnail} />
+                  <img src={getImageUrl(img)} alt="" style={styles.thumbnail} />
                 </div>
               ))}
             </div>
