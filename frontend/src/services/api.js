@@ -1,8 +1,14 @@
 import axios from 'axios';
 
+// Normalize base URL: if VITE_API_URL is set but doesn't end with /api, append it automatically
+let baseUrl = import.meta.env.VITE_API_URL || '/api';
+if (baseUrl !== '/api' && !baseUrl.endsWith('/api') && !baseUrl.endsWith('/api/')) {
+  baseUrl = baseUrl.replace(/\/$/, '') + '/api';
+}
+
 // Create axios instance
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: baseUrl,
   headers: {
     'Content-Type': 'application/json',
   },
